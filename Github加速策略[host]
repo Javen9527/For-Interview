@@ -1,0 +1,8 @@
+1.登入网址：http://github.com.ipaddress.com/
+  查询IP:github.com
+  查询IP:github.global.ssl.fastly.net
+  
+2.修改host：C:\Windows\System32\drivers\etc
+  末尾添加：
+  <IP Address>  github.com
+  <IP Address>  github.global.ssl.fastly.net
