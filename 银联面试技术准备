@@ -1,0 +1,265 @@
+//银联技术面准备//
+
+一.数据结构、算法、STL
+
+0.理论框架
+	(1)数据结构{
+		①线性结构{
+			数组	(连续存储)
+			链表	(离散存储)
+			栈	(先进后出)
+			队	(先进先出)
+		}
+		②树结构{
+			二叉树
+			搜索树	(排序)
+			平衡树	(高度差)
+			AVL树	(搜索+平衡)
+			红黑树	(特殊AVL)
+			B树B+树	(层数少子树多)
+		}
+		③图结构
+		④哈希结构{
+			数组+链表
+			数组+二叉树
+		}
+	}
+	(2)算法{
+		①排序算法
+		②链表相关算法		(单链表反转)
+		③二叉树相关的算法	(遍历、应用)
+		④二分查找算法
+	}
+	(3)STL{
+		①线性结构：
+			vector
+			list
+			stack
+			queue
+		②树结构：
+			set
+			map
+	}
+
+1.排序算法
+
+//选择排序(选择优位，最后已优)
+void mySelect(int* arr, int lo, int hi){
+	if((hi - lo) < 2) return;
+	
+	for(int pos = lo; pos < hi - 1; pos++){
+		int min = pos;
+		for(int cpa = pos + 1; cpa < hi; cpa++){
+			if(arr[cpa] < arr[min]) min = cpa;
+		}
+		swap(arr[pos], arr[min]);
+	}
+}
+//插入排序(插入已序，最前已序)
+void myInsert(int* arr, int lo, int hi) {
+	if ((hi - lo) < 2) return;
+	
+	for (int pos = lo + 1; pos < hi; pos++) {
+		int tmp = arr[pos];
+		int cmp = pos - 1;
+		for (; cmp >= lo && arr[pos] < arr[cmp]; cmp--) {
+			arr[cmp + 1] = arr[cmp];
+		}
+		arr[cmp + 1] = tmp;
+	}
+}
+//冒泡排序(选择排序的变种)
+void myBubble(int* arr, int lo, int hi) {
+	if ((hi - lo) < 2) return;
+
+	for (int pos = lo; pos < hi - 1; pos++) {
+		for (int cmp = hi - 1; cmp > pos; cmp--) {
+			if (arr[pos] > arr[cmp]) swap(arr[pos], arr[cmp]);
+		}
+	}
+}
+//归并排序
+void merge(int* arr, int lo, int mi, int hi){
+	int* A = arr + lo;
+	
+	int* B = new int[mi - lo];
+	int numB = mi - lo;
+	for(int i = 0; i < numB; B[i++] = A[i]);
+	
+	int* C = arr + mi;
+	int numC = hi - mi;
+	
+	for(int a = 0, b = 0, c = 0; (b < numB) || (c < numC);){
+		if(((B[b] <= C[c]) || !(c < numC)) && (b < numB)) A[a++] = B[b++];
+		if(((C[c] < B[b]) || !(b < numB)) && (c < numC)) A[a++] = C[c++];
+	}
+	
+}
+void myMerge(int* arr, int lo, int hi){
+	if((hi - lo) < 2) return;
+	
+	int mi = lo + hi >> 1;
+	myMerge(arr, lo, mi);
+	myMerge(arr, mi, hi);
+	merge(arr, lo, mi, hi);
+}
+//快速排序
+//希尔排序
+
+2.链表相关的算法
+
+//单链表反转
+struct ListNode{
+	int data;
+	struct ListNode * next;
+};
+struct ListNode* myReverse(struct ListNode* head){
+	if(NULL == head) return head;
+	
+	struct ListNode* nHead = NULL;
+	struct ListNode* tmp = head;
+	while(head != NULL){
+		tmp = head->next;
+		head->next = nHead;
+		nHead = head;
+		head = tmp;
+	}
+	return nHead;
+}
+
+3.二叉树相关的算法
+
+//二叉树遍历
+typedef struct Binary_Tree_Node{
+	int data;
+	struct Binary_Tree_Node* lChild;
+	struct Binary_Tree_Node* rChild;
+}BTNode;
+//先序中序后序
+void myFSL(BTNode* root){
+	if(NULL == root) return;
+	
+	myFSL(root->lChild);
+	cout << root->data;
+	myFSL(root->rChild);	
+}
+//层序
+void myCengxu(BTNode* root) {
+	if (NULL == root) return;
+
+	queue<BTNode*> myQ;
+	myQ.push(root);
+
+	while (!myQ.empty()) {
+		cout << myQ.front()->data;
+		if (myQ.front()->lChild != NULL) myQ.push(myQ.front()->lChild);
+		if (myQ.front()->rChild != NULL) myQ.push(myQ.front()->rChild);
+		myQ.pop();
+	}
+}
+
+
+4.二分查找算法
+
+//有序表+线性结构
+int myBS(int* arr, int lo, int hi, int key){
+	if((hi -lo) < 1) return -1;
+	
+	int mi = lo+hi >> 1;
+	if(arr[mi] == key)
+		return mi;
+	else if(arr[mi] < key)
+		return myBS(arr, mi+1, hi, key);
+	else 
+		return myBS(arr, lo, mi-1);	
+}
+
+二、C/C++基础
+
+1.内存管理
+
+(1)操作系统的抽象概念
+	①文件：对I/O的抽象
+	②虚拟内存：对主存的抽象
+	③进程：
+	④虚拟机
+	
+(2)虚拟内存：
+	①内核虚拟内存
+	②栈:
+		局部对象
+		函数参数
+		调用函数和被调函数的关系
+	③共享库
+	④堆：
+		
+	⑤.bss
+	⑥.data
+	⑦.text
+
+(3)堆：
+	①malloc:	void* malloc(unsigned int size);
+	②calloc:	void* calloc(unsigned n, unsigned size);
+	③realloc: 	void* realloc(void* ptr, size_t size);
+	④free:		void free(void* ptr);
+
+(4)内存操作函数：
+	①memset
+	②memcpy
+	③memmove
+	④memcmp
+
+2.多进程多线程
+
+(1)进程间通信方式（IPC）：
+	①管道：		内核缓冲区、父子进程
+	②命名管道：	
+	
+	⑤消息队列：	内核
+	
+	③信号量：		锁机制
+	④信号
+	
+	⑥共享内存：	效率高
+	
+	⑦套接字
+
+(2)共享内存[内核专门预留的内存区]：
+	//mmap:建立共享内存映射
+	//munmap:解除共享内存映射
+	shmget:	创建共享内存
+		int shmget(key_t key, int size, int shmflg);
+	shmat:	建立映射
+		char *shmat(int shmid, const void* shmaddr, int shmflg);
+	shmdt:	删除映射
+		int shmdt(const void* shmaddr);
+	
+(3)线程
+	①生产者消费者模型（条件变量）
+		
+	②线程同步：需要等待
+		1.互斥量(锁)
+			死锁：
+				1.反复加锁
+				2.线程1有A锁请求B锁，线程2有B锁请求A锁
+		2.读写锁
+			只有一把锁，读共享，写独占，写优先级高
+		3.条件变量
+			本身不是锁，通常结合mutex使用，但是可以有阻塞效果
+			生产者消费者模型
+		4.信号量
+			相当于初始化值为N的互斥量（因为互斥量导致并行变成串行）
+			semaphore与signal完全无关
+			
+	③线程异步：不用等待
+	
+(4)并发和并行
+	①并发concurrent：	可以处理多个任务
+	②并行parallel：	同时处理多个任务
+	
+(5)高并发设计：
+	①分布式：使用集群而不是单机
+	②缓存：
+	③异步：
+	
+  ing...
