@@ -1,0 +1,28 @@
+零、前言
+1. 使用VMware安装mac虚拟机
+
+一、MacOS的vscode配置开发环境
+1. 相关的插件：
+    ① chinese
+    ② c/c++
+
+2. C/C++配置环境：visual studio code 官网 → docs 笔记
+    https://code.visualstudio.com/docs/cpp/config-clang-mac
+    
+    * 注意，在进行设定时候需要将源文件作为活动文件
+    ① compiler + debugger
+        ·compiler: tasks.json
+        ·debugger: launch.json
+        ·c_cpp_properties.json: compiler path and intelliSense setting
+    ② 创建编译文件：task.json
+        ·终端 → 配置默认生成任务 → c/c++:clang++ build active fiel
+        ·对照官网进行修改
+        ·进行编译：终端 → 运行生成任务
+        ·编译生成的.dsym文件是debugger file
+        ·运行可执行文件：新打开终端 ./可执行文件名
+    ③ 创建调试文件：launch.json
+        ·运行 → 添加配置 → 选择c++(GDB/LLDB) → 选择clang++ build and debg active file
+    ④ 创建c/c++配置设定文件：c_cpp_properties.json
+        ·command+p调出panel输入：>C/C++:Edit configurations[有两种：UI .json]
+
+    * 要想重复使用这些配置，请将这些.json文件复制到新的项目中的.vscode路径下即可(再修改源文件和生成文件名即可)
